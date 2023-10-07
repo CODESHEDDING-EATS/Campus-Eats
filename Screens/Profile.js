@@ -1,4 +1,9 @@
 import React, { useEffect, useState } from "react";
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import Toggle from "react-native-toggle-element";
+import colors from "../colors";
+
+console.log(launchImageLibrary)
 import {
     Dimensions,
     SafeAreaView,
@@ -7,18 +12,53 @@ import {
     TouchableOpacity,
     View,
     Image,
-    TouchableWithoutFeedback
+    TouchableWithoutFeedback,
+    Button,
+    Switch
 } from "react-native";
 import * as Font from "expo-font";
 import { FontAwesome5 } from '@expo/vector-icons';
 import { PFPpopup } from "../PopUps/PFPpopup";
 import Colors from "../colors";
+import { signOut } from "firebase/auth";
 
 const { width, height } = Dimensions.get("window");
 
 const ProfileScreen = ({ navigation }) => {
     let popupRef = React.createRef();
     const [fontLoaded, setFontLoaded] = useState(false);
+
+    // Delivery status
+    const [toggleValue, setToggleValue] = useState(false);
+
+    //options for the image picker
+    let options = {
+        title: 'Select Avatar',
+        storageOptions: {
+          skipBackup: true,
+          path: 'images',
+        },
+    };
+
+    // This function is currently not working, still trying to figure it out @Panda
+    const pickFromGallery = () => {
+        console.log("adding picture.....")
+        launchImageLibrary(options, (response) => {
+            console.log("adding picture.....")
+            if (response.didCancel) {
+              console.log('User cancelled image picker');
+            } else if (response.error) {
+              console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+              console.log('User tapped custom button: ', response.customButton);
+            } else {
+              const source = { uri: response.uri };
+              this.setState({
+                avatarSource: source,
+              });
+            }
+          });
+    };
 
     useEffect(() => {
         async function loadFont() {
@@ -65,7 +105,6 @@ const ProfileScreen = ({ navigation }) => {
                             onTouchOutside={onClosePopup}
                         />
                     </View>
-
                     <View style={styles.profileImage}>
                         <Image
                             source={require("../assets/avatar.png")}
@@ -74,6 +113,46 @@ const ProfileScreen = ({ navigation }) => {
                         />
                     </View>
                 </View>
+                <View style={styles.updateSection}>
+                </View>
+
+                {/* <View>
+                    <Text>
+                        Credits: 10 Kudu
+                    </Text>
+                </View> */}
+
+                <View style={{flexDirection:'row'}}>
+                    <Toggle 
+
+                        thumbButton={{
+                            activeBackgroundColor: "green",
+                            inActiveBackgroundColor: "grey"
+                        }}
+                        trackBarStyle={{
+                            borderColor: 'green',
+                            backgroundColor: "#4DBA0F",
+                        }}
+                    
+                        trackBar={{
+                            radius: 10,
+                            borderWidth: 2
+                        }}
+                        value={toggleValue}
+                        onPress={(newState) => setToggleValue(newState)}
+                        leftTitle="Off"
+                        rightTitle="On"
+                    />
+                    <Text style={styles.text}> Delivery Status</Text>
+                </View>...
+
+                <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+                    <TouchableOpacity activeOpacity={0.7} style={styles.btncontainer} onPress={() => console.log("signout")}>
+                        <Text>Sign Out</Text>
+                    </TouchableOpacity>
+                    
+                </View>
+                    
             </View>
         </SafeAreaView>
     );
@@ -118,6 +197,28 @@ const styles = StyleSheet.create({
         marginHorizontal: width * 0.05,
         position: "relative",
     },
+    btncontainer : {
+        backgroundColor: colors.primary,
+        width: '90%',
+        padding: 20,
+        marginVertical: 40,
+        alignItems:'center',
+        borderRadius: 12,
+    },
+    text:{
+        justifyContent: "center",
+        fontFamily: 'Urbanist-Bold',
+        alignContent: "center",
+        fontSize: 30,
+    },
+
+    updateSection : {
+        height: '40%'
+    },
+
+    toogle : {
+
+    }
 });
 
 export default ProfileScreen;
