@@ -35,39 +35,59 @@ const NotificationsScreen = ({ navigation }) => {
     const [isDropdownVisible, setDropdownVisible] = useState(false);
     const [selectedOption, setSelectedOption] = useState("Entire Campus");
     const options = ["Entire Campus", "East", "West" ];
+    // useEffect(() => {
+    //     // console.log("jaos")
+    //     // console.log(allOrders)
+    //     const completeFiltered = allOrders.filter(item => {item.delivered === false})
+    //
+    //     // console.log(selectedOption);
+    //     // console.log("asdfsdaffsdafsdafsdarfsdafsdafsdagfsdagdfs")
+    //     // i need to do date ascending here
+    //     if (selectedOption === null || selectedOption === "Entire Campus" ) {
+    //         // console.log(allOrders)
+    //         const sortedFilteredOrders = allOrders.sort((a, b) => b.timePlaced.toMillis() - a.timePlaced.toMillis());
+    //
+    //         setFilteredOrders(allOrders);
+    //         // setFilteredOrders(allOrders);
+    //     }
+    //     else{
+    //         console.log('B')
+    //
+    //         const filtered = allOrders.filter(item => {
+    //             if (selectedOption === "East") {
+    //                 // Assuming "East" locations are ["Library Lawns", "Solomon Mahlangu House"]
+    //                 return ["Chinese Lantern", "Deli Delicious", "Jimmy's East Campus", "Love & Light", "Planet Savvy", "Sausage saloon", "Starbucks", "Xpresso"  ].includes(item.cart[0].restaurantName);
+    //             } else if (selectedOption === "West") {
+    //                 // Assuming "West" locations are ["Law Lawns", "The Tower", "Chamber of Mines", "Science Stadium"]
+    //                 return ["Jimmy's West Campus", "The Tower", "Olives and Plates", "vida e caffe", "Zesty Lemonz"].includes(item.location);
+    //             }
+    //         });
+    //         // console.log("filtering");
+    //         // console.log(filtered);
+    //         const sortedFilteredOrders = filtered.sort((a, b) => b.timePlaced.toMillis() - a.timePlaced.toMillis());
+    //         setFilteredOrders(sortedFilteredOrders);
+    //     }
+    // }, [selectedOption, deliveryStatus,allOrders]);
     useEffect(() => {
-        // console.log("jaos")
-        // console.log(allOrders)
-        const completeFiltered = allOrders.filter(item => {item.delivered === false})
+        // Filter orders based on delivery status and selected option
+        const filtered = allOrders.filter(item => {
+            if (!item.delivered) { // Only include orders where delivered is false
+                if (selectedOption === null || selectedOption === "Entire Campus") {
+                    return true; // Include all orders when selectedOption is null or "Entire Campus"
+                } else if (selectedOption === "East") {
+                    return ["Chinese Lantern", "Deli Delicious", "Jimmy's East Campus", "Love & Light", "Planet Savvy", "Sausage saloon", "Starbucks", "Xpresso"].includes(item.cart[0].restaurantName);
+                } else if (selectedOption === "West") {
+                    return ["Jimmy's West Campus", "The Tower", "Olives and Plates", "vida e caffe", "Zesty Lemonz"].includes(item.location);
+                }
+            }
+            return false; // Exclude orders where delivered is true
+        });
 
-        // console.log(selectedOption);
-        // console.log("asdfsdaffsdafsdafsdarfsdafsdafsdagfsdagdfs")
-        // i need to do date ascending here
-        if (selectedOption === null || selectedOption === "Entire Campus" ) {
-            // console.log(allOrders)
-            const sortedFilteredOrders = allOrders.sort((a, b) => b.timePlaced.toMillis() - a.timePlaced.toMillis());
+        // Sort the filtered orders by timePlaced in descending order
+        const sortedFilteredOrders = filtered.sort((a, b) => b.timePlaced.toMillis() - a.timePlaced.toMillis());
 
-            setFilteredOrders(allOrders);
-            // setFilteredOrders(allOrders);
-        }
-        else{
-            console.log('B')
-
-            const filtered = allOrders.filter(item => {
-                    if (selectedOption === "East") {
-                        // Assuming "East" locations are ["Library Lawns", "Solomon Mahlangu House"]
-                        return ["Chinese Lantern", "Deli Delicious", "Jimmy's East Campus", "Love & Light", "Planet Savvy", "Sausage saloon", "Starbucks", "Xpresso"  ].includes(item.cart[0].restaurantName);
-                    } else if (selectedOption === "West") {
-                        // Assuming "West" locations are ["Law Lawns", "The Tower", "Chamber of Mines", "Science Stadium"]
-                        return ["Jimmy's West Campus", "The Tower", "Olives and Plates", "vida e caffe", "Zesty Lemonz"].includes(item.location);
-                    }
-                });
-                // console.log("filtering");
-                // console.log(filtered);
-            const sortedFilteredOrders = filtered.sort((a, b) => b.timePlaced.toMillis() - a.timePlaced.toMillis());
-            setFilteredOrders(sortedFilteredOrders);
-        }
-    }, [selectedOption, deliveryStatus,allOrders]);
+        setFilteredOrders(sortedFilteredOrders);
+    }, [selectedOption, deliveryStatus, allOrders]);
     const handleFilterPress = () => {
         toggleDropdown()
     };
@@ -199,7 +219,7 @@ const NotificationsScreen = ({ navigation }) => {
         const handleComplete = (item) => {
 
             if(pin === item.pin.toString()){
-                 completeOrder(item);
+                completeOrder(item);
                 setFilteredOrders(prevOrders => prevOrders.filter(order => order.id !== item.id));
 
             }else{
@@ -273,9 +293,9 @@ const NotificationsScreen = ({ navigation }) => {
                                     <Text style={styles.subText}>
                                         Meet-up spot: {item.location}
                                     </Text>
-                                    <Text style={styles.subText}>
-                                       DELIVERED: {item.delivered.toString()}
-                                    </Text>
+                                    {/*<Text style={styles.subText}>*/}
+                                    {/*    DELIVERED: {item.delivered.toString()}*/}
+                                    {/*</Text>*/}
                                 </View>
                             </View>
                         </>
@@ -428,7 +448,7 @@ const NotificationsScreen = ({ navigation }) => {
             </View>
         </SafeAreaView>
     );
-    
+
 };
 
 const styles = StyleSheet.create({
