@@ -7,11 +7,12 @@ import {
     Text,
     TouchableOpacity,
     View,
-    TouchableWithoutFeedback
+    TouchableWithoutFeedback, Linking
 } from "react-native";
 import React, {useEffect, useState, useRef} from 'react'
 import {Ionicons} from "@expo/vector-icons";
 import colors from "../colors";
+import {completeOrder} from "../consts/orders";
 const deviceHeight = Dimensions.get("window").height
 //import {Camera, useCameraDevices} from "react-native-vision-camera";
 
@@ -43,6 +44,13 @@ export class PFPpopup extends React.Component{
         )
     }
 
+    navToGrav = () => {
+        const gravitarLink = 'https://gravatar.com/';
+
+        Linking.openURL(gravitarLink).catch((err) => console.error('An error occurred', err));
+
+    }
+
     renderTitle =  () => {
         const {title} =this.props
         return(
@@ -59,31 +67,17 @@ export class PFPpopup extends React.Component{
         )
     }
 
+
+
     renderContent = () => {
         return (
             <View style={styles.buttonContainer}>
                 <View style={styles.buttonWithText}>
-                    <TouchableOpacity style={styles.circularButton}>
-                        <Ionicons name="camera" size={24} color="white" style={styles.icon}/>
-                    </TouchableOpacity>
-                    <Text style={styles.buttonText}>
-                        Camera
-                    </Text>
-                </View>
-                <View style={styles.buttonWithText}>
-                    <TouchableOpacity style={styles.circularButton}>
+                    <TouchableOpacity style={styles.circularButton} onPress={this.navToGrav}>
                         <Ionicons name="image" size={24} color="white" style={styles.icon}/>
                     </TouchableOpacity>
                     <Text style={styles.buttonText}>
-                        Upload
-                    </Text>
-                </View>
-                <View style={styles.buttonWithText}>
-                    <TouchableOpacity style={styles.circularButton}>
-                        <Ionicons name="trash-bin" size={24} color="white" style={styles.icon} />
-                    </TouchableOpacity>
-                    <Text style={styles.buttonText}>
-                        Delete
+                        Join Gravitar
                     </Text>
                 </View>
             </View>
@@ -118,7 +112,7 @@ export class PFPpopup extends React.Component{
                         borderTopLeftRadius:10,
                         borderTopRightRadius:10,
                         paddingHorizontal: 10,
-                        height: deviceHeight*0.21
+                        height: deviceHeight*0.18
                     }}>
                         {this.renderTitle()}
                         {this.renderContent()}
@@ -137,6 +131,7 @@ const styles = StyleSheet.create({
     },
     buttonWithText: {
         alignItems: 'center',
+        flexDirection: 'row'
     },
     circularButton: {
         width: 60, // Adjust as needed for button size
@@ -149,10 +144,12 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         marginTop: 5, // Adjust as needed for spacing between button and text
-        fontSize: 16, // Set the desired font size for the text
+        fontSize: 18, // Set the desired font size for the text
+        marginLeft: 20,
+        fontWeight: 'bold'
     },
     icon: {
-        marginTop: 15
+        marginTop: 17
     }
     // Add more styles for your buttons as needed
 });
