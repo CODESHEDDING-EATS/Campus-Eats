@@ -144,10 +144,10 @@ const StatusScreen = ({ navigation, route }) => {
                             </View>
                             <View style={styles.card}>
                                 <View style={styles.profileImage}>
-                                    <Image
-                                        source={{uri: `https://www.gravatar.com/avatar/${md5(item.orderersEmail)}?s=200`}}
-                                        style={styles.cardImage}
-                                        resizeMode= "cover"
+                                    {/*<Image*/}
+                                    {/*    source={{uri: `https://www.gravatar.com/avatar/${md5(currOrder.orderersEmail)}?s=200`}}*/}
+                                    {/*    style={styles.cardImage}*/}
+                                    {/*    resizeMode= "cover"*/}
 
                                     />
                                 </View>
