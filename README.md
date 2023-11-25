@@ -10,6 +10,7 @@ CampusEats is a delivery app designed for the Wits University campus, providing 
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
+- [Quick Start Video](#Quick-Start-Video)
 - [Usage](#usage)
   - [User Registration and Login](#user-registration-and-login)
   - [Changing User Status](#changing-user-status)
@@ -97,6 +98,7 @@ Add Kudu credits to your account.
 Browse food categories on the home page.
 Select desired items and click "Place Order."
 Confirm order details and proceed to checkout.
+
 <img src="screenshots/placing_order.jpg" width="500" />
 
 
@@ -114,4 +116,5 @@ Three order statuses: "Finding Delivery Person," "Order Accepted," and "Order Co
 ### Driver Notifications
 Drivers receive notifications for new orders.
 Accept or reject orders.
+
 <img src="screenshots/orders_notifications.jpg" width="500" />
